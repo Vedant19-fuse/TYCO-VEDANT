@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyco Final Year Project Groups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2c5aa0;
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 18px;
+            margin: 0 0 20px 0;
+        }
+        
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c5aa0;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .group-box {
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .group-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .group-box.filled {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+        }
+        
+        .group-header {
+            background: linear-gradient(135deg, #2c5aa0, #1e3a8a);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+        }
+        
+        .group-box.filled .group-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .status-badge {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .group-content {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c5aa0;
+            box-shadow: 0 0 0 4px rgba(44, 90, 160, 0.1);
+        }
+        
+        .students-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .student-group {
+            margin-bottom: 20px;
+        }
+        
+        .student-group label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2c5aa0, #1e3a8a);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44, 90, 160, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .filled-display {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #bbf7d0;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .filled-display h4 {
+            color: #059669;
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .filled-display .project-name {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 20px;
+            font-size: 18px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .filled-display .student-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .filled-display .student-list li {
+            padding: 12px 0;
+            color: #374151;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 1px solid #d1fae5;
+        }
+        
+        .filled-display .student-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .summary {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .summary h3 {
+            color: #2c5aa0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .summary p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .debug-info {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #92400e;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .groups-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tyco Final Year Project Groups</h1>
+            <p>Live registration system - Choose your group and submit your project details</p>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                LIVE UPDATES
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="filledGroups">0</span>
+                    <span class="stat-label">Groups Filled</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="availableGroups">12</span>
+                    <span class="stat-label">Available Groups</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalStudents">0</span>
+                    <span class="stat-label">Students Registered</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="debugInfo" class="debug-info">
+            🔧 Debug: JavaScript loading... Groups will appear below once loaded.
+        </div>
+        
+        <div class="groups-container" id="groupsContainer">
+            <!-- Groups will be loaded here -->
+        </div>
+        
+        <div class="summary">
+            <h3>📋 Instructions</h3>
+            <p><strong>How to register:</strong> Choose an available group below, fill in your project name and all three team members' names, then click "Submit Group" to confirm your registration. Once submitted, your group will be marked as complete and visible to all other students.</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script loading...');
+        
+        // Simple storage system
+        let groupsData = {};
+        const STORAGE_KEY = 'tyco_groups_data';
+        
+        // Debug function
+        function debug(message) {
+            console.log('DEBUG:', message);
+            const debugEl = document.getElementById('debugInfo');
+            if (debugEl) {
+                debugEl.innerHTML = '🔧 Debug: ' + message;
+            }
+        }
+        
+        // Initialize data
+        function initializeData() {
+            debug('Initializing data...');
+            groupsData = {};
+            for (let i = 1; i <= 12; i++) {
+                groupsData[i] = {
+                    filled: false,
+                    projectName: '',
+                    students: ['', '', '']
+                };
+            }
+            
+            // Try to load from localStorage
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    groupsData = parsed;
+                    debug('Data loaded from storage');
+                } else {
+                    debug('No saved data found, using fresh data');
+                }
+            } catch (e) {
+                debug('Storage load failed: ' + e.message);
+            }
+        }
+        
+        // Save data
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(groupsData));
+                debug('Data saved to storage');
+            } catch (e) {
+                debug('Storage save failed: ' + e.message);
+            }
+        }
+        
+        // Create HTML for a single group
+        function createGroupHTML(groupNumber) {
+            const group = groupsData[groupNumber];
+            
+            if (group.filled) {
+                return `
+                    <div class="group-box filled">
+                        <div class="group-header">
+                            GROUP ${groupNumber}
+                            <span class="status-badge">COMPLETED ✓</span>
+                        </div>
+                        <div class="group-content">
+                            <div class="filled-display">
+                                <h4>🎉 Group Successfully Registered!</h4>
+                                <div class="project-name">📚 ${group.projectName}</div>
+                                <ul class="student-list">
+                                    <li>👨‍🎓 ${group.students[0]}</li>
+                                    <li>👨‍🎓 ${group.students[1]}</li>
+                                    <li>👨‍🎓 ${group.students[2]}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="group-box">
+                        <div class="group-header">
+                            GROUP ${groupNumber}
+                            <span class="status-badge">AVAILABLE</span>
+                        </div>
+                        <div class="group-content">
+                            <div class="form-group">
+                                <label>📚 Project Name:</label>
+                                <input type="text" id="project${groupNumber}" placeholder="Enter your project name">
+                            </div>
+                            <div class="students-section">
+                                <div class="form-group">
+                                    <label>👥 Team Members:</label>
+                                </div>
+                                <div class="student-group">
+                                    <label>Student 1:</label>
+                                    <input type="text" id="student${groupNumber}_1" placeholder="Enter first student name">
+                                </div>
+                                <div class="student-group">
+                                    <label>Student 2:</label>
+                                    <input type="text" id="student${groupNumber}_2" placeholder="Enter second student name">
+                                </div>
+                                <div class="student-group">
+                                    <label>Student 3:</label>
+                                    <input type="text" id="student${groupNumber}_3" placeholder="Enter third student name">
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" onclick="clearGroup(${groupNumber})">🗑️ Clear</button>
+                                <button class="btn btn-primary" onclick="submitGroup(${groupNumber})">✅ Submit Group</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Render all groups
+        function renderGroups() {
+            debug('Rendering groups...');
+            const container = document.getElementById('groupsContainer');
+            
+            if (!container) {
+                debug('Container not found!');
+                return;
+            }
+            
+            let html = '';
+            for (let i = 1; i <= 12; i++) {
+                html += createGroupHTML(i);
+            }
+            
+            container.innerHTML = html;
+            updateStats();
+            debug('Groups rendered successfully!');
+            
+            // Hide debug info after successful render
+            setTimeout(() => {
+                const debugEl = document.getElementById('debugInfo');
+                if (debugEl) debugEl.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Submit a group
+        function submitGroup(groupNumber) {
+            const projectName = document.getElementById(`project${groupNumber}`).value.trim();
+            const student1 = document.getElementById(`student${groupNumber}_1`).value.trim();
+            const student2 = document.getElementById(`student${groupNumber}_2`).value.trim();
+            const student3 = document.getElementById(`student${groupNumber}_3`).value.trim();
+            
+            if (!projectName || !student1 || !student2 || !student3) {
+                alert('❌ Please fill all fields!');
+                return;
+            }
+            
+            if (confirm(`Submit Group ${groupNumber}?\n\nProject: ${projectName}\nStudents: ${student1}, ${student2}, ${student3}`)) {
+                groupsData[groupNumber] = {
+                    filled: true,
+                    projectName: projectName,
+                    students: [student1, student2, student3]
+                };
+                
+                saveData();
+                renderGroups();
+                alert(`🎉 Group ${groupNumber} submitted successfully!`);
+            }
+        }
+        
+        // Clear a group
+        function clearGroup(groupNumber) {
+            document.getElementById(`project${groupNumber}`).value = '';
+            document.getElementById(`student${groupNumber}_1`).value = '';
+            document.getElementById(`student${groupNumber}_2`).value = '';
+            document.getElementById(`student${groupNumber}_3`).value = '';
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const filled = Object.values(groupsData).filter(g => g.filled).length;
+            const available = 12 - filled;
+            const students = filled * 3;
+            
+            document.getElementById('filledGroups').textContent = filled;
+            document.getElementById('availableGroups').textContent = available;
+            document.getElementById('totalStudents').textContent = students;
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            debug('DOM loaded, starting initialization...');
+            initializeData();
+            renderGroups();
+        });
+        
+        // Fallback initialization
+        window.addEventListener('load', function() {
+            debug('Window loaded, ensuring initialization...');
+            if (!document.getElementById('groupsContainer').innerHTML.trim()) {
+                initializeData();
+                renderGroups();
+            }
+        });
+        
+        console.log('Script loaded successfully!');
+    </script>
+</body>
+</html>
